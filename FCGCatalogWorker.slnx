@@ -6,6 +6,7 @@
     <Project Path="src/FCG.Catalog.Worker/FCG.Catalog.Worker.csproj" Id="8b48379b-3313-4690-beb3-d4446dc81d3d" />
   </Folder>
   <Folder Name="/tests/">
+    <Project Path="tests/CommonTestUtilities/CommonTestUtilities.csproj" Id="4c143416-5c74-4b26-962d-b36b4f2f39e0" />
     <Project Path="tests/FCG.Catalog.Worker.Tests/FCG.Catalog.Worker.Tests.csproj" Id="a419f6a9-93e8-450f-a394-358e9a759908" />
   </Folder>
 </Solution>

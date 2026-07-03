@@ -1,0 +1,6 @@
+[submodule "src/FCG.Catalog.Worker.Shared"]
+	path = src/FCG.Catalog.Worker.Shared
+	url = https://github.com/IgorAnthonyy/FCG-Shared.git
+[submodule "src/FCG.Shared"]
+	path = src/FCG.Shared
+	url = https://github.com/IgorAnthonyy/FCG-Shared.git

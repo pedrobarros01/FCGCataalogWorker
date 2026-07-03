@@ -4,6 +4,7 @@
     <Project Path="src/FCG.Catalog.Worker.Domain/FCG.Catalog.Worker.Domain.csproj" Id="5283d7af-1da2-4e7a-a9ce-f78662390de7" />
     <Project Path="src/FCG.Catalog.Worker.Infrastructure/FCG.Catalog.Worker.Infrastructure.csproj" Id="1f4a694d-bea3-4151-81c4-0ae001b3fb37" />
     <Project Path="src/FCG.Catalog.Worker/FCG.Catalog.Worker.csproj" Id="8b48379b-3313-4690-beb3-d4446dc81d3d" />
+    <Project Path="src/FCG.Shared/FCG.Shared.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/CommonTestUtilities/CommonTestUtilities.csproj" Id="4c143416-5c74-4b26-962d-b36b4f2f39e0" />

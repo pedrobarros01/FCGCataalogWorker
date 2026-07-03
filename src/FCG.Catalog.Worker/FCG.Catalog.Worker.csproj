@@ -17,4 +17,8 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.9" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FCG.Catalog.Worker.Infrastructure\FCG.Catalog.Worker.Infrastructure.csproj" />
+  </ItemGroup>
 </Project>

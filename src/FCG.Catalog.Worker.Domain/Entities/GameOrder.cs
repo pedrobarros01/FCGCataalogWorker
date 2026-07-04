@@ -8,7 +8,7 @@ namespace FCG.Catalog.Worker.Domain.Entities;
 public class GameOrder : BaseEntity
 {
     public Guid ExternalId { get; private set; }
-    public long GameId { get; private set; }
+    public long GameId { get; set; }
     public Game Game { get; private set; } = default!;
     public Guid UserId { get; private set; }
     public decimal Price { get; private set; }

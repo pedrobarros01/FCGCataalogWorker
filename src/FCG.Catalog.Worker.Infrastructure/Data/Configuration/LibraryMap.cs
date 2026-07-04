@@ -11,16 +11,53 @@ public class LibraryMap : IEntityTypeConfiguration<Library>
 {
     public void Configure(EntityTypeBuilder<Library> builder)
     {
-        builder.ToTable("Library");
+        builder.ToTable("Libraries");
+
         builder.HasKey(library => library.Id);
+
         builder.Property(library => library.Id)
             .ValueGeneratedOnAdd();
+
+        builder.Property(library => library.ExternalId)
+            .IsRequired()
+            .HasDefaultValueSql("gen_random_uuid()");
+
+        builder.HasIndex(library => library.ExternalId)
+            .IsUnique();
 
         builder.Property(library => library.UserId)
             .IsRequired();
 
-        builder.HasMany(library => library.Items)
-            .WithOne(item => item.Library)
-            .HasForeignKey(item => item.LibraryId);
+        builder.HasIndex(library => library.UserId)
+            .IsUnique();
+
+        builder
+            .HasMany(library => library.Games)
+            .WithMany()
+            .UsingEntity<Dictionary<string, object>>(
+                "LibraryGames",
+                right => right
+                    .HasOne<Game>()
+                    .WithMany()
+                    .HasForeignKey("GameId")
+                    .OnDelete(DeleteBehavior.Restrict),
+                left => left
+                    .HasOne<Library>()
+                    .WithMany()
+                    .HasForeignKey("LibraryId")
+                    .OnDelete(DeleteBehavior.Cascade),
+                join =>
+                {
+                    join.ToTable("LibraryGames");
+
+                    join.HasKey("LibraryId", "GameId");
+
+                    join.Property<long>("LibraryId")
+                        .IsRequired();
+
+                    join.Property<long>("GameId")
+                        .IsRequired();
+                }
+            );
     }
 }

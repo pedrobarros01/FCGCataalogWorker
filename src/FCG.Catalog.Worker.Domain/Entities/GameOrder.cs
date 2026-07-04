@@ -7,14 +7,14 @@ namespace FCG.Catalog.Worker.Domain.Entities;
 
 public class GameOrder : BaseEntity
 {
-    public Guid OrderId { get; set; }
-    public long GameId { get; set; }
-    public Game Game { get; set; } = default!;
-    public Guid UserId { get; set; }
-    public decimal Price { get; set; }
-    public GameOrderStatus Status { get; set; }
-    public DateTime CreatedOn { get; set; }
-    public DateTime? ProcessedOn { get; set; }
+    public Guid ExternalId { get; private set; }
+    public long GameId { get; private set; }
+    public Game Game { get; private set; } = default!;
+    public Guid UserId { get; private set; }
+    public decimal Price { get; private set; }
+    public GameOrderStatus Status { get; private set; }
+    public DateTime CreatedOn { get; private set; }
+    public DateTime? ProcessedOn { get; private set; }
 
     public GameOrder()
     {

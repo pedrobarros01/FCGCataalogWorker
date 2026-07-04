@@ -6,7 +6,9 @@ namespace FCG.Catalog.Worker.Domain.Entities;
 
 public class Library : BaseEntity
 {
-    public Guid UserId { get; set; }
-    public ICollection<LibraryItem> Items { get; set; } = [];
+    public Guid ExternalId { get; private set; }
+    public Guid UserId { get; private set; }
+    private readonly List<Game> _games = [];
+    public IReadOnlyCollection<Game> Games => _games.AsReadOnly();
 
 }

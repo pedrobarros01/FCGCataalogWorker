@@ -11,4 +11,8 @@ public class Library : BaseEntity
     private readonly List<Game> _games = [];
     public IReadOnlyCollection<Game> Games => _games.AsReadOnly();
 
+    public void AddGame(Game game)
+    {
+        throw new NotImplementedException();
+    }
 }

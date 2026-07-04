@@ -16,10 +16,9 @@ public class Library : BaseEntity
         
     }
 
-    public Library(Game game, Guid userId)
+    public Library(Guid userId)
     {
         UserId = userId;
-        this.AddGame(game);
     }
 
     public void AddGame(Game game)

@@ -1,4 +1,5 @@
 ﻿using CommonTestUtilities.Entities;
+using FCG.Catalog.Worker.Domain.Entities;
 using FCG.Catalog.Worker.Tests.Fixture;
 using System;
 using System.Collections.Generic;
@@ -25,6 +26,16 @@ public class LibraryTest
         var library = _libraryBuilder.GenerateLibrary();
 
         library.AddGame(game);
+
+        Assert.Single(library.Games);
+        Assert.Equal(game.Name, library.Games.ToList()[0].Name);
+    }
+
+    [Fact]
+    public void LibraryEntity_Shrould_CreateEntity()
+    {
+        var game = _gameBuilder.GenerateGame();
+        var library = new Library(game, Guid.NewGuid());
 
         Assert.Single(library.Games);
         Assert.Equal(game.Name, library.Games.ToList()[0].Name);

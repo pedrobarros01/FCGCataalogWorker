@@ -34,10 +34,10 @@ public class LibraryTest
     [Fact]
     public void LibraryEntity_Shrould_CreateEntity()
     {
+        var userId = Guid.NewGuid();
         var game = _gameBuilder.GenerateGame();
-        var library = new Library(game, Guid.NewGuid());
+        var library = new Library(userId);
 
-        Assert.Single(library.Games);
-        Assert.Equal(game.Name, library.Games.ToList()[0].Name);
+        Assert.Equal(library.UserId, userId);
     }
 }

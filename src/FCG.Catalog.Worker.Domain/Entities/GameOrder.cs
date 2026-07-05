@@ -12,12 +12,18 @@ public class GameOrder : BaseEntity
     public Game Game { get; private set; } = default!;
     public Guid UserId { get; private set; }
     public decimal Price { get; private set; }
-    public GameOrderStatus Status { get; private set; }
+    public GameOrderStatus Status { get; set; }
     public DateTime CreatedOn { get; private set; }
     public DateTime? ProcessedOn { get; private set; }
 
     public GameOrder()
     {
         
+    }
+
+    public void Update(int orderStatus)
+    {
+        ProcessedOn = DateTime.UtcNow;
+        Status = (GameOrderStatus)orderStatus;
     }
 }

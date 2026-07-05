@@ -9,12 +9,12 @@ using System.Text;
 namespace FCG.Catalog.Worker.Tests.Repositories;
 
 [Collection(nameof(GameFixtureCollection))]
-public class GameRepositoryTes
+public class GameRepositoryTest
 {
     public LibraryBuilder _libraryBuilder { get; set; }
     public GameBuilder _gameBuilder { get; set; }
     public CategoryBuilder _categoryBuilder { get; set; }
-    public GameRepositoryTes(GameBuilder gameBuilder)
+    public GameRepositoryTest(GameBuilder gameBuilder)
     {
         _libraryBuilder = new LibraryBuilder();
         _categoryBuilder = new CategoryBuilder();

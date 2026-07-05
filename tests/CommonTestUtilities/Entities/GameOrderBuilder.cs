@@ -16,6 +16,14 @@ public class GameOrderBuilder
         return gameOrder;
     }
 
+    public GameOrder GenerateGameOrderPending(Game game)
+    {
+        var gameOrder = Build();
+        gameOrder.Status = GameOrderStatus.Pending;
+        gameOrder.GameId = game.Id;
+        return gameOrder;
+    }
+
     private GameOrder Build()
     {
         var status = new[]

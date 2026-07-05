@@ -8,5 +8,6 @@ namespace FCG.Catalog.Worker.Domain.Interfaces;
 public interface ILibraryDomainService
 {
     Task<Library> AddGame(Library library, Guid gameId);
-    Task<Library?> GetLibraryByUserId(Guid userId);
+    Task<bool> LibraryExist(Guid userId);
+    Task<Library> GetByUserId(Guid userId);
 }

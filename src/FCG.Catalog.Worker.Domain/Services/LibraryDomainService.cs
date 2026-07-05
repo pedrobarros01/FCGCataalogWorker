@@ -21,10 +21,17 @@ public class LibraryDomainService : ILibraryDomainService
 
     public async Task<Library> AddGame(Library library, Guid gameId)
     {
+        
         Game game = await _gameRepository.GetById(gameId) ?? throw new BusinessException("Jogo não encontrado");
         library.AddGame(game);
         return library;
     }
 
-    public async Task<Library?> GetLibraryByUserId(Guid userId) => await _libraryRepository.GetLibraryByUserId(userId);
+    public async Task<Library> GetByUserId(Guid userId)
+    {
+        Library library = await _libraryRepository.GetLibraryByUserId(userId) ?? throw new BusinessException("Biblioteca não encontrada");
+        return library;
+    }
+
+    public async Task<bool> LibraryExist(Guid userId) => await _libraryRepository.GetLibraryByUserId(userId) != null;
 }

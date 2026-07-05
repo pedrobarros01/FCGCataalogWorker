@@ -51,7 +51,7 @@ public class OrderService : BaseApplicationService, IOrderService
         if((GameOrderStatus)update.GameOrderStatus == GameOrderStatus.Approved)
         {
             
-            await _libraryDomainService.AddGame(library, update.GameId);
+            await _libraryDomainService.AddGame(library, update.GameId, order.GameId);
             if (!insert)
             {
                 _libraryRepository.Update(library);

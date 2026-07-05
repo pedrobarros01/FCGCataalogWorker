@@ -19,10 +19,10 @@ public class LibraryDomainService : ILibraryDomainService
         _gameRepository = gameRepository;
     }
 
-    public async Task<Library> AddGame(Library library, Guid gameId)
+    public async Task<Library> AddGame(Library library, Guid gameId, long orderGameId)
     {
-        
         Game game = await _gameRepository.GetById(gameId) ?? throw new BusinessException("Jogo não encontrado");
+        if (game.Id != orderGameId) throw new BusinessException("Jogo pedido não é o mesmo da entidade GameOrder");
         library.AddGame(game);
         return library;
     }

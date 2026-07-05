@@ -1,8 +1,12 @@
 <Solution>
+  <Folder Name="/Itens de Solução/">
+    <File Path="Dockerfile" />
+  </Folder>
   <Folder Name="/src/">
     <Project Path="src/FCG.Catalog.Worker.Application/FCG.Catalog.Worker.Application.csproj" Id="0b83ebc1-18aa-4957-af61-1dfad64e30c3" />
     <Project Path="src/FCG.Catalog.Worker.Domain/FCG.Catalog.Worker.Domain.csproj" Id="5283d7af-1da2-4e7a-a9ce-f78662390de7" />
     <Project Path="src/FCG.Catalog.Worker.Infrastructure/FCG.Catalog.Worker.Infrastructure.csproj" Id="1f4a694d-bea3-4151-81c4-0ae001b3fb37" />
+    <Project Path="src/FCG.Catalog.Worker.Logger/FCG.Catalog.Worker.Logger.csproj" Id="bc20bfae-e0ad-44b4-9cac-0a45b8c21801" />
     <Project Path="src/FCG.Catalog.Worker/FCG.Catalog.Worker.csproj" Id="8b48379b-3313-4690-beb3-d4446dc81d3d" />
     <Project Path="src/FCG.Shared/FCG.Shared.csproj" />
   </Folder>

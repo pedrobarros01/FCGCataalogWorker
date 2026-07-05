@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\FCG.Catalog.Worker.Application\FCG.Catalog.Worker.Application.csproj" />
     <ProjectReference Include="..\FCG.Catalog.Worker.Domain\FCG.Catalog.Worker.Domain.csproj" />
   </ItemGroup>
 

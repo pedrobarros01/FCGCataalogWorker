@@ -12,7 +12,7 @@ public class GameOrderMap : IEntityTypeConfiguration<GameOrder>
 {
     public void Configure(EntityTypeBuilder<GameOrder> builder)
     {
-        builder.ToTable("GameOrders");
+        builder.ToTable("GameOrders", t => t.ExcludeFromMigrations());
 
         builder.HasKey(order => order.Id);
 

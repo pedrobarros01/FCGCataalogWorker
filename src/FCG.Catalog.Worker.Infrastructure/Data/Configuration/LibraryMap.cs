@@ -11,7 +11,7 @@ public class LibraryMap : IEntityTypeConfiguration<Library>
 {
     public void Configure(EntityTypeBuilder<Library> builder)
     {
-        builder.ToTable("Libraries");
+        builder.ToTable("Libraries", t => t.ExcludeFromMigrations());
 
         builder.HasKey(library => library.Id);
 

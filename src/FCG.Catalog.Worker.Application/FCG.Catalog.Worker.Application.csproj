@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\FCG.Catalog.Worker.Domain\FCG.Catalog.Worker.Domain.csproj" />
+    <ProjectReference Include="..\FCG.Shared\FCG.Shared.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -12,7 +12,7 @@ public class GameRepository(ApplicationDbContext context) : BaseRepository<Game>
 {
     public async Task<Game?> GetById(Guid gameId)
     {
-        return await BaseQuery<Game>()
+        return await BaseQuery<Game>(true)
             .FirstOrDefaultAsync(g => g.ExternalId == gameId);
     }
 }

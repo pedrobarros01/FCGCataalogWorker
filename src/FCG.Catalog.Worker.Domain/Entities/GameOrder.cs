@@ -9,7 +9,7 @@ public class GameOrder : BaseEntity
 {
     public Guid ExternalId { get; private set; }
     public long GameId { get; set; }
-    public Game Game { get; private set; } = default!;
+    public Game Game { get; set; } = default!;
     public Guid UserId { get; private set; }
     public decimal Price { get; private set; }
     public GameOrderStatus Status { get; set; }

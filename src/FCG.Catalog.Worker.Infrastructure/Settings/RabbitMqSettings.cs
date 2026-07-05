@@ -9,6 +9,5 @@ public class RabbitMqSettings
     public string VirtualHost { get; set; } = "/";
     public string Username { get; set; } = string.Empty;
     public string Password { get; set; } = string.Empty;
-    public string KeyQueuePaymentProcessed { get; set; } = string.Empty;
-    public string KeyPublisher { get; set; } = string.Empty;
+    public string KeyQueuePaymentProcessed { get; set; } = "payment.processed";
 }

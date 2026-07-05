@@ -36,20 +36,26 @@ public class OrderService : BaseApplicationService, IOrderService
         GameOrder order = await _gameOrderDomainService.UpdateOrder(update.OrderId, update.GameOrderStatus);
         _gameOrderRepository.Update(order);
         Library? library = null;
+        bool insert = false;
         if (!await _libraryDomainService.LibraryExist(update.UserId))
         {
             library = await _libraryRepository.Insert(new Library(update.UserId));
-
+            insert = true;
         }
         else
         {
             library = await _libraryDomainService.GetByUserId(update.UserId);
+            insert = false;
         }
 
         if((GameOrderStatus)update.GameOrderStatus == GameOrderStatus.Approved)
         {
             
             await _libraryDomainService.AddGame(library, update.GameId);
+            if (!insert)
+            {
+                _libraryRepository.Update(library);
+            }
 
         }
         await UnitOfWork.CommitAsync();

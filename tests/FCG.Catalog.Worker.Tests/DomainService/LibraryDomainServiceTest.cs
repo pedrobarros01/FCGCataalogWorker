@@ -38,7 +38,7 @@ public class LibraryDomainServiceTest
 
         var domainService = new LibraryDomainService(repositoryLibrary, repositoryGame);
 
-        var libraryInserted = await domainService.AddGame(library, game.ExternalId);
+        var libraryInserted = await domainService.AddGame(library, game.ExternalId, game.Id);
 
         Assert.NotNull(libraryInserted);
         Assert.Equal(game.Name, libraryInserted.Games.First().Name);
@@ -60,8 +60,28 @@ public class LibraryDomainServiceTest
 
         var domainService = new LibraryDomainService(repositoryLibrary, repositoryGame);
 
-        await Assert.ThrowsAsync<BusinessException>(() => domainService.AddGame(library, game2.ExternalId));
+        await Assert.ThrowsAsync<BusinessException>(() => domainService.AddGame(library, game2.ExternalId, game2.Id));
     
+    }
+
+    [Fact]
+    public async Task LibraryDomainService_Should_ThrowGameConflictException()
+    {
+        var game = _gameBuilder.GenerateGame();
+        var game2 = _gameBuilder.GenerateGame();
+        var categorie = _categoryBuilder.GenerateCategory();
+        categorie.Games.Add(game);
+        var library = _libraryBuilder.GenerateLibrary();
+
+        var context = await ContextBuilder.GenerateContext(categories: [categorie], libraries: [library]);
+
+        var repositoryLibrary = new LibraryRepository(context);
+        var repositoryGame = new GameRepository(context);
+
+        var domainService = new LibraryDomainService(repositoryLibrary, repositoryGame);
+
+        await Assert.ThrowsAsync<BusinessException>(() => domainService.AddGame(library, game.ExternalId, game2.Id));
+
     }
 
     [Fact]

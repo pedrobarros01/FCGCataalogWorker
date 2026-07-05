@@ -10,4 +10,5 @@ builder.Services
     .ConfigureInfrastructure(builder.Configuration);
 
 IHost host = builder.Build();
+host.ApplyMigrations();
 host.Run();

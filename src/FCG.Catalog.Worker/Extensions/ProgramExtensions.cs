@@ -1,6 +1,7 @@
 ﻿using FCG.Catalog.Worker.Application.DTO;
 using FCG.Catalog.Worker.Application.Interfaces;
 using FCG.Catalog.Worker.Application.Services;
+using FCG.Catalog.Worker.Domain.Entities;
 using FCG.Catalog.Worker.Domain.Interfaces;
 using FCG.Catalog.Worker.Domain.Interfaces.Repositories;
 using FCG.Catalog.Worker.Domain.Services;
@@ -10,6 +11,7 @@ using FCG.Catalog.Worker.Infrastructure.Persistence;
 using FCG.Catalog.Worker.Infrastructure.Queue;
 using FCG.Catalog.Worker.Infrastructure.Repositories;
 using FCG.Catalog.Worker.Infrastructure.Settings;
+using FCG.Catalog.Worker.Logger;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -30,7 +32,7 @@ public static class ProgramExtensions
     public static IServiceCollection ConfigureWorker(this IServiceCollection services)
     {
         services.AddHostedService<Worker>();
-
+        services.AddHostedService<LoggerWorker>();
         return services;
     }
     public static IServiceCollection ConfigureDomain(this IServiceCollection services)
@@ -65,7 +67,8 @@ public static class ProgramExtensions
         }
         services.AddDbContext<ApplicationDbContext>(options =>
         options.UseNpgsql(databaseConnection.DefaultConnection));
-
+        services.AddDbContext<LoggerDbContext>(options =>
+        options.UseNpgsql(databaseConnection.DefaultConnection));
         services.AddMassTransit(
             x =>
             {
@@ -94,6 +97,8 @@ public static class ProgramExtensions
         services.AddScoped<IGameOrderRepository, GameOrderRepository>();
         services.AddScoped<IGameRepository, GameRepository>();
         services.AddScoped<ILibraryRepository, LibraryRepository>();
+        services.AddSingleton(Channel.CreateUnbounded<LogWorker>());
+        services.AddSingleton<ILoggerProvider, DatabaseLoggerProvider>();
         return services;
     }
     public static IServiceCollection ConfigureSettings(this IServiceCollection services, IConfiguration configuration)
@@ -105,7 +110,7 @@ public static class ProgramExtensions
     {
         using (var scope = app.Services.CreateScope())
         {
-            var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            var dbContext = scope.ServiceProvider.GetRequiredService<LoggerDbContext>();
             dbContext.Database.Migrate();
         }
         return app;

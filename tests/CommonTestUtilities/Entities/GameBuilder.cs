@@ -16,7 +16,6 @@ public class GameBuilder
     private Game Build()
     {
         var library = new Faker<Game>("pt_BR")
-            .RuleFor(p => p.Id, faker => faker.Random.Long())
             .RuleFor(p => p.ExternalId, faker => faker.Random.Guid())
             .RuleFor(p => p.CategoryId, faker => faker.Random.Long())
             .RuleFor(p => p.Price, faker => faker.Random.Decimal(1, 500))

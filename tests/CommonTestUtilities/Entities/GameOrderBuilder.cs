@@ -33,7 +33,6 @@ public class GameOrderBuilder
             GameOrderStatus.Rejected,
         };
         var gameOrder = new Faker<GameOrder>("pt_BR")
-            .RuleFor(p => p.Id, faker => faker.Random.Long())
             .RuleFor(p => p.ExternalId, faker => faker.Random.Guid())
             .RuleFor(p => p.UserId, faker => faker.Random.Guid())
             .RuleFor(p => p.Price, faker => faker.Random.Decimal(1, 500))

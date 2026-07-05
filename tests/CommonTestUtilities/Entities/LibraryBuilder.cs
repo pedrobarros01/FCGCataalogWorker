@@ -16,7 +16,6 @@ public class LibraryBuilder
     private Library Build()
     {
         var library = new Faker<Library>("pt_BR")
-            .RuleFor(p => p.Id, faker => faker.Random.Long())
             .RuleFor(p => p.ExternalId, faker => faker.Random.Guid())
             .RuleFor(p => p.UserId, faker => faker.Random.Guid());
         return library;

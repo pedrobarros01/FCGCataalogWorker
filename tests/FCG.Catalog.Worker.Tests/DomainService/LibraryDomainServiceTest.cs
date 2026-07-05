@@ -65,6 +65,45 @@ public class LibraryDomainServiceTest
     }
 
     [Fact]
+    public async Task LibraryDomainService_Should_VerifyLibraryExist()
+    {
+        var game = _gameBuilder.GenerateGame();
+        var categorie = _categoryBuilder.GenerateCategory();
+        categorie.Games.Add(game);
+        var library = _libraryBuilder.GenerateLibrary();
+        var userId = library.UserId;
+        var context = await ContextBuilder.GenerateContext(categories: [categorie], libraries: [library]);
+
+        var repositoryLibrary = new LibraryRepository(context);
+        var repositoryGame = new GameRepository(context);
+
+        var domainService = new LibraryDomainService(repositoryLibrary, repositoryGame);
+
+        var foundLibrary = await domainService.LibraryExist(userId);
+
+        Assert.True(foundLibrary);
+    }
+
+    [Fact]
+    public async Task LibraryDomainService_Should_VerifyLibraryNotExist()
+    {
+        var game = _gameBuilder.GenerateGame();
+        var categorie = _categoryBuilder.GenerateCategory();
+        categorie.Games.Add(game);
+        var library = _libraryBuilder.GenerateLibrary();
+        var userId = Guid.NewGuid();
+        var context = await ContextBuilder.GenerateContext(categories: [categorie], libraries: [library]);
+
+        var repositoryLibrary = new LibraryRepository(context);
+        var repositoryGame = new GameRepository(context);
+
+        var domainService = new LibraryDomainService(repositoryLibrary, repositoryGame);
+
+        var foundLibrary = await domainService.LibraryExist(userId);
+
+        Assert.False(foundLibrary);
+    }
+    [Fact]
     public async Task LibraryDomainService_Should_GetLibrary()
     {
         var game = _gameBuilder.GenerateGame();
@@ -79,20 +118,20 @@ public class LibraryDomainServiceTest
 
         var domainService = new LibraryDomainService(repositoryLibrary, repositoryGame);
 
-        var foundLibrary = await domainService.GetLibraryByUserId(userId);
+        var foundLibrary = await domainService.GetByUserId(userId);
 
-        Assert.NotNull(foundLibrary);
         Assert.Equal(library.ExternalId, foundLibrary.ExternalId);
     }
 
     [Fact]
-    public async Task LibraryDomainService_Should_GetLibraryNull()
+    public async Task LibraryDomainService_Should_ThrowLibraryNotFoundException()
     {
         var game = _gameBuilder.GenerateGame();
+        var game2 = _gameBuilder.GenerateGame();
         var categorie = _categoryBuilder.GenerateCategory();
         categorie.Games.Add(game);
         var library = _libraryBuilder.GenerateLibrary();
-        var userId = Guid.NewGuid();
+
         var context = await ContextBuilder.GenerateContext(categories: [categorie], libraries: [library]);
 
         var repositoryLibrary = new LibraryRepository(context);
@@ -100,8 +139,7 @@ public class LibraryDomainServiceTest
 
         var domainService = new LibraryDomainService(repositoryLibrary, repositoryGame);
 
-        var foundLibrary = await domainService.GetLibraryByUserId(userId);
+        await Assert.ThrowsAsync<BusinessException>(() => domainService.GetByUserId(Guid.NewGuid()));
 
-        Assert.Null(foundLibrary);
     }
 }

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Worker">
+﻿<Project Sdk="Microsoft.NET.Sdk.Worker">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
@@ -20,5 +20,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FCG.Catalog.Worker.Infrastructure\FCG.Catalog.Worker.Infrastructure.csproj" />
+    <ProjectReference Include="..\FCG.Catalog.Worker.Logger\FCG.Catalog.Worker.Logger.csproj" />
   </ItemGroup>
 </Project>

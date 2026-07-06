@@ -1,5 +1,6 @@
 <Solution>
   <Folder Name="/Itens de Solução/">
+    <File Path="docker-compose.yml" />
     <File Path="Dockerfile" />
   </Folder>
   <Folder Name="/src/">
@@ -9,6 +10,11 @@
     <Project Path="src/FCG.Catalog.Worker.Logger/FCG.Catalog.Worker.Logger.csproj" Id="bc20bfae-e0ad-44b4-9cac-0a45b8c21801" />
     <Project Path="src/FCG.Catalog.Worker/FCG.Catalog.Worker.csproj" Id="8b48379b-3313-4690-beb3-d4446dc81d3d" />
     <Project Path="src/FCG.Shared/FCG.Shared.csproj" />
+  </Folder>
+<Folder Name="/k8s/">
+    <File Path="k8s/fcg-catalog-worker-configmap.yml" />
+    <File Path="k8s/fcg-catalog-worker-deployment.yml" />
+    <File Path="k8s/fcg-catalog-worker-secret.yml" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/CommonTestUtilities/CommonTestUtilities.csproj" Id="4c143416-5c74-4b26-962d-b36b4f2f39e0" />

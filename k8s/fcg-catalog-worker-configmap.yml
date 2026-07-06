@@ -3,4 +3,4 @@ kind: ConfigMap
 metadata:
   name: fcg-catalog-worker-config
 data:
-  RabbitMQ__KeyQueuePaymentProcessedr: "payment.processed"  
+  RabbitMQ__KeyQueuePaymentProcessed: "payment.processed"  

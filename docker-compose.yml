@@ -1,0 +1,46 @@
+
+
+networks:
+  fcgcatalog-net:
+    driver: bridge
+
+services:
+
+  rabbitmq:
+    image: rabbitmq:4.3.2-management-alpine
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    restart: always
+    networks:
+      - fcgcatalog-net
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+      - rabbitmq_logs:/var/log/rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: user
+      RABBITMQ_DEFAULT_PASS: senha
+      RABBITMQ_DEFAULT_VHOST: my_vhost
+
+  fcgcatalog:
+    build:
+      context: .
+    restart: always
+    depends_on:
+      - rabbitmq
+    environment:
+      ConnectionStrings__DefaultConnection: "Host=host.docker.internal;Port=5432;Database=devCatalog;Username=postgres;Password=mysecretpassword"
+      RabbitMQ__Host: fcgcatalogworker-rabbitmq-1
+      RabbitMQ__VirtualHost: "my_vhost"
+      RabbitMQ__Username: user
+      RabbitMQ__Password: senha
+      RabbitMQ__KeyQueuePaymentProcessed: "payment.processed"
+    networks:
+      - fcgcatalog-net
+
+
+
+
+volumes:
+  rabbitmq_data: {}
+  rabbitmq_logs: {}

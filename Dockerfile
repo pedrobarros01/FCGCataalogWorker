@@ -4,12 +4,12 @@ WORKDIR /app
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /build
 COPY ["src/FCG.Catalog.Worker/FCG.Catalog.Worker.csproj", "build/FCG.Catalog.Worker"]
-COPY ["src/FCG.Catalog.Application/FCG.Catalog.Application.csproj", "build/FCG.Catalog.Application"]
-COPY ["src/FCG.Catalog.Domain/FCG.Catalog.Domain.csproj", "build/FCG.Catalog.Domain"]
-COPY ["src/FCG.Catalog.Infrastructure/FCG.Catalog.Infrastructure.csproj", "build/FCG.Catalog.Infrastructure"]
-COPY ["src/FCG.Catalog.Shared/FCG.Catalog.Shared.csproj", "build/FCG.Catalog.Shared"]
+COPY ["src/FCG.Catalog.Worker.Application/FCG.Catalog.Worker.Application.csproj", "build/FCG.Catalog.Worker.Application"]
+COPY ["src/FCG.Catalog.Worker.Domain/FCG.Catalog.Worker.Domain.csproj", "build/FCG.Catalog.Worker.Domain"]
+COPY ["src/FCG.Catalog.Worker.Infrastructure/FCG.Catalog.Worker.Infrastructure.csproj", "build/FCG.Catalog.Worker.Infrastructure"]
+COPY ["src/FCG.Shared/FCG.Shared.csproj", "build/FCG.Shared"]
 COPY . .
-RUN dotnet restore "build/FCG.Catalog.Worker/FCG.Catalog.Worker.csproj"
+RUN dotnet restore "/build/src/FCG.Catalog.Worker/FCG.Catalog.Worker.csproj"
 WORKDIR "/build/src/FCG.Catalog.Worker"
 RUN dotnet build "FCG.Catalog.Worker.csproj" -c Release -o /app/build
 

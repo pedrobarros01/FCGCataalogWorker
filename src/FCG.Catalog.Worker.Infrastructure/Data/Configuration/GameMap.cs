@@ -11,7 +11,7 @@ internal class GameMap : IEntityTypeConfiguration<Game>
 {
     public void Configure(EntityTypeBuilder<Game> builder)
     {
-        builder.ToTable("Games");
+        builder.ToTable("Games", t => t.ExcludeFromMigrations());
 
         builder.HasKey(game => game.Id);
 

@@ -1,7 +1,23 @@
-﻿using FCG.Catalog.Worker.Infrastructure.Data;
+﻿using FCG.Catalog.Worker.Application.DTO;
+using FCG.Catalog.Worker.Application.Interfaces;
+using FCG.Catalog.Worker.Application.Services;
+using FCG.Catalog.Worker.Domain.Entities;
+using FCG.Catalog.Worker.Domain.Interfaces;
+using FCG.Catalog.Worker.Domain.Interfaces.Repositories;
+using FCG.Catalog.Worker.Domain.Services;
+using FCG.Catalog.Worker.Infrastructure.Data;
+using FCG.Catalog.Worker.Infrastructure.Messaging.Consumer;
+using FCG.Catalog.Worker.Infrastructure.Persistence;
+using FCG.Catalog.Worker.Infrastructure.Queue;
+using FCG.Catalog.Worker.Infrastructure.Repositories;
 using FCG.Catalog.Worker.Infrastructure.Settings;
+using FCG.Catalog.Worker.Logger;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Runtime;
@@ -16,30 +32,33 @@ public static class ProgramExtensions
     public static IServiceCollection ConfigureWorker(this IServiceCollection services)
     {
         services.AddHostedService<Worker>();
-        //services.AddHostedService<LoggerWorker>();
-
+        services.AddHostedService<LoggerWorker>();
         return services;
     }
     public static IServiceCollection ConfigureDomain(this IServiceCollection services)
     {
+        services.AddScoped<ILibraryDomainService, LibraryDomainService>();
+        services.AddScoped<IGameOrderDomainService, GameOrderDomainService>();
         return services;
     }
     public static IServiceCollection ConfigureApplication(this IServiceCollection services)
     {
+        services.AddSingleton<IProcessingQueue<OrderUpdate>, ProcessingQueue<OrderUpdate>>();
 
+        services.AddScoped<IOrderService, OrderService>();
         return services;
     }
     public static IServiceCollection ConfigureInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
-        //var rabbitMqSettings = configuration.GetSection("RabbitMQ").Get<RabbitMqSettings>();
-        //if (rabbitMqSettings == null ||
-        //string.IsNullOrWhiteSpace(rabbitMqSettings.Host) ||
-        //string.IsNullOrWhiteSpace(rabbitMqSettings.Username) ||
-        //string.IsNullOrWhiteSpace(rabbitMqSettings.Password) ||
-        //string.IsNullOrWhiteSpace(rabbitMqSettings.KeyQueueOrderPlaced))
-        //{
-        //    throw new InvalidOperationException("RabbitMQ não configurado, verifique as ENVs do projeto");
-        //}
+        var rabbitMqSettings = configuration.GetSection("RabbitMQ").Get<RabbitMqSettings>();
+        if (rabbitMqSettings == null ||
+        string.IsNullOrWhiteSpace(rabbitMqSettings.Host) ||
+        string.IsNullOrWhiteSpace(rabbitMqSettings.Username) ||
+        string.IsNullOrWhiteSpace(rabbitMqSettings.Password) ||
+        string.IsNullOrWhiteSpace(rabbitMqSettings.KeyQueuePaymentProcessed))
+        {
+            throw new InvalidOperationException("RabbitMQ não configurado, verifique as ENVs do projeto");
+        }
         var databaseConnection = configuration.GetSection("ConnectionStrings").Get<ConnectionStrings>();
         if (databaseConnection == null ||
         string.IsNullOrWhiteSpace(databaseConnection.DefaultConnection))
@@ -48,41 +67,38 @@ public static class ProgramExtensions
         }
         services.AddDbContext<ApplicationDbContext>(options =>
         options.UseNpgsql(databaseConnection.DefaultConnection));
+        services.AddDbContext<LoggerDbContext>(options =>
+        options.UseNpgsql(databaseConnection.DefaultConnection));
+        services.AddMassTransit(
+            x =>
+            {
+                x.AddConsumer<PaymentProcessedConsumer>();
+                x.UsingRabbitMq((context, cfg) =>
+                {
+                    cfg.Host(
+                       host: rabbitMqSettings.Host,
+                       virtualHost: rabbitMqSettings.VirtualHost ?? "/",
+                       h =>
+                       {
+                           h.Username(rabbitMqSettings.Username);
+                           h.Password(rabbitMqSettings.Password);
+                       }
+                    );
+                    cfg.ReceiveEndpoint(rabbitMqSettings.KeyQueuePaymentProcessed, e =>
+                    {
+                        e.ConfigureConsumer<PaymentProcessedConsumer>(context);
+                    });
 
-        //services.AddMassTransit(
-        //    x =>
-        //    {
-        //        x.AddConsumer<OrderPlacedConsumer>();
-        //        x.UsingRabbitMq((context, cfg) =>
-        //        {
-        //            cfg.Host(
-        //               host: rabbitMqSettings.Host,
-        //               virtualHost: rabbitMqSettings.VirtualHost ?? "/",
-        //               h =>
-        //               {
-        //                   h.Username(rabbitMqSettings.Username);
-        //                   h.Password(rabbitMqSettings.Password);
-        //               }
-        //            );
-        //            cfg.ReceiveEndpoint(rabbitMqSettings.KeyQueueOrderPlaced, e =>
-        //            {
-        //                e.ConfigureConsumer<OrderPlacedConsumer>(context);
-        //            });
+                });
+            }
 
-        //            cfg.Publish<PaymentProcessedEvent>(p => p.ExchangeType = "topic");
-        //            cfg.ConfigureEndpoints(context);
-
-        //        });
-        //    }
-
-        //);
-
-        //services.AddScoped<IUnitOfWork, UnitOfWork>();
-        //services.AddScoped<IPaymentProcessedPublisher, PaymentProcessedPublisher>();
-        //services.AddScoped<IPaymentTransactionRepository, PaymentTransactionRepository>();
-        //services.AddScoped<IPaymentTransactionStatusRepository, PaymentTransactionStatusRepository>();
-        //services.AddSingleton(Channel.CreateUnbounded<Log>());
-        //services.AddSingleton<ILoggerProvider, DatabaseLoggerProvider>();
+        );
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<IGameOrderRepository, GameOrderRepository>();
+        services.AddScoped<IGameRepository, GameRepository>();
+        services.AddScoped<ILibraryRepository, LibraryRepository>();
+        services.AddSingleton(Channel.CreateUnbounded<LogWorker>());
+        services.AddSingleton<ILoggerProvider, DatabaseLoggerProvider>();
         return services;
     }
     public static IServiceCollection ConfigureSettings(this IServiceCollection services, IConfiguration configuration)
@@ -94,7 +110,7 @@ public static class ProgramExtensions
     {
         using (var scope = app.Services.CreateScope())
         {
-            var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            var dbContext = scope.ServiceProvider.GetRequiredService<LoggerDbContext>();
             dbContext.Database.Migrate();
         }
         return app;

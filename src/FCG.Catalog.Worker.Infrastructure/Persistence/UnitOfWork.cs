@@ -1,4 +1,5 @@
-﻿using FCG.Catalog.Worker.Domain.Interfaces.Repositories;
+﻿using FCG.Catalog.Worker.Domain.Entities;
+using FCG.Catalog.Worker.Domain.Interfaces.Repositories;
 using FCG.Catalog.Worker.Infrastructure.Data;
 using System;
 using System.Collections.Generic;

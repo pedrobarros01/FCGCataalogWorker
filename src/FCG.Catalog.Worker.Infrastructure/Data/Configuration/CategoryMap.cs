@@ -11,7 +11,7 @@ internal class CategoryMap : IEntityTypeConfiguration<Category>
 {
     public void Configure(EntityTypeBuilder<Category> builder)
     {
-        builder.ToTable("Categories");
+        builder.ToTable("Categories", t => t.ExcludeFromMigrations());
 
         builder.HasKey(category => category.Id);
 

@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fcg-catalog-worker-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fcg-catalog-worker-deployment
+  template:
+    metadata:
+      labels:
+        app: fcg-catalog-worker-deployment
+    spec:
+      containers:
+      - name: fcg-catalog-worker-container
+        image: drungas/fcgcatalogworker
+        envFrom:
+        - configMapRef:
+            name: fcg-catalog-worker-config
+        - secretRef:
+            name: fcg-catalog-worker-secret

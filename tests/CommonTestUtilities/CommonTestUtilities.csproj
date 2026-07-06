@@ -11,4 +11,9 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="10.0.9" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\FCG.Catalog.Worker.Domain\FCG.Catalog.Worker.Domain.csproj" />
+    <ProjectReference Include="..\..\src\FCG.Catalog.Worker.Infrastructure\FCG.Catalog.Worker.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -24,7 +24,9 @@ public class ConsumerTest
             Guid.NewGuid(),
             Guid.NewGuid(),
             Guid.NewGuid(),
-            random.Next(1, 3)
+            "teste",
+            random.Next(1, 3),
+            "Approved"
         );
         var contextConsumer = new Mock<ConsumeContext<PaymentProcessedEvent>>();
         contextConsumer

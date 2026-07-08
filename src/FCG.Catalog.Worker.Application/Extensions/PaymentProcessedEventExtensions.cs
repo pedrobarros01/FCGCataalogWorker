@@ -10,6 +10,6 @@ public static class PaymentProcessedEventExtensions
 {
     public static OrderUpdate MapToDTO(this PaymentProcessedEvent @event)
     {
-        return new OrderUpdate(@event.OrderId, @event.UserId, @event.GameId, @event.GameOrderStatus);
+        return new OrderUpdate(@event.OrderId, @event.UserId, @event.GameId, @event.Status == "Approved" ? 1 : 2);
     }
 }
